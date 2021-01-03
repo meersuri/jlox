@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.lang.model.util.ElementScanner14;
-
 public class Scanner {
 
     private final String source;
