@@ -70,6 +70,26 @@ public class Scanner {
         return source.charAt(current);
     }
 
+    private void string()
+    {
+        while (peek() != '"' && !isAtEnd())
+        {
+            if (peek() == '\n')
+                line++;
+            advance();
+        }
+        if (isAtEnd())
+        {
+            Lox.error(line, "Unterminated string.");
+            return;
+        }
+        // skip over terminating '"'
+        advance();
+        // trim quotes
+        String value = source.substring(start + 1, current - 1);
+        addToken(TokenType.STRING, value);
+    }
+
     private void scanToken()
     {
         char c = advance();
@@ -132,6 +152,9 @@ public class Scanner {
                 break;
             case '\n':
                 line++;
+                break;
+            case '"':
+                string();
                 break;
 
             default:
