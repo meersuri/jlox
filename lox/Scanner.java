@@ -126,6 +126,14 @@ public class Scanner {
                 else
                     addToken(TokenType.SLASH);
                 break;
+            case ' ':
+            case '\r':
+            case '\t':
+                break;
+            case '\n':
+                line++;
+                break;
+
             default:
                 Lox.error(line, "Unexpected character.");
                 break;
