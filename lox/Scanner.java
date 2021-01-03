@@ -90,6 +90,34 @@ public class Scanner {
         addToken(TokenType.STRING, value);
     }
 
+    private boolean isDigit(char c)
+    {
+        return c >= '0' && c <= '9';
+    }
+
+    private char peekNext()
+    {
+        if (current + 1 >= source.length())
+            return '\0';
+        return source.charAt(current + 1);
+    }
+
+    private void number()
+    {
+        while (isDigit(peek()))
+            advance();
+        if (peek() == '.' && isDigit(peekNext()))
+        {
+            // Consume decimal point
+            advance();
+            // read fractional part
+            while (isDigit(peek()))
+                advance();
+        }
+        double value = Double.parseDouble(source.substring(start, current));
+        addToken(TokenType.NUMBER, value);
+    }
+
     private void scanToken()
     {
         char c = advance();
@@ -158,8 +186,13 @@ public class Scanner {
                 break;
 
             default:
-                Lox.error(line, "Unexpected character.");
-                break;
+                if (isDigit(c))
+                    number();
+                else
+                {
+                    Lox.error(line, "Unexpected character.");
+                    break;
+                }
         }
     }
 }
