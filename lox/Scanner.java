@@ -63,6 +63,13 @@ public class Scanner {
         return true;
     }
 
+    private char peek()
+    {
+        if (isAtEnd())
+            return '\0';
+        return source.charAt(current);
+    }
+
     private void scanToken()
     {
         char c = advance();
@@ -109,6 +116,15 @@ public class Scanner {
                 break;
             case '=':
                 addToken(match('=')? TokenType.EQUAL_EQUAL : TokenType.EQUAL); 
+                break;
+            case '/':
+                if (match('/'))
+                {
+                    while (peek() != '\n' && !isAtEnd())
+                        advance();
+                }
+                else
+                    addToken(TokenType.SLASH);
                 break;
             default:
                 Lox.error(line, "Unexpected character.");
