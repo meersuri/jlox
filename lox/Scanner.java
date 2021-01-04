@@ -222,6 +222,24 @@ public class Scanner {
                     while (peek() != '\n' && !isAtEnd())
                         advance();
                 }
+                else if(match('*'))
+                {
+                    while (!(isAtEnd() || (peek() == '*' && peekNext() == '/')))
+                    {
+                        if (peek() == '\n')
+                            line++;
+                        advance();
+                    }
+                    if (isAtEnd())
+                    {
+                        Lox.error(line, "Unterminated comment.");
+                        return;
+                    }
+                    // skip '*'
+                    advance();
+                    // skip '/'
+                    advance();
+                }
                 else
                     addToken(TokenType.SLASH);
                 break;
